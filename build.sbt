@@ -6,3 +6,5 @@ libraryDependencies ++= Seq(
   // Add your own project dependencies in the form:
   // "group" % "artifact" % "version"
 )
+
+enablePlugins(JmhPlugin)
