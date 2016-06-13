@@ -52,14 +52,24 @@ class SortedSetBenchmark {
     items += item
   }
 
+  @Benchmark
+  def find(): Unit = {
+    items.find(_.id == Random.nextInt(Count).toString)
+  }
+
+  @Benchmark
+  def noop(): Unit = {
+    // ...
+  }
+
 }
 
 object SortedSetBenchmark {
 
-  implicit val ItemOrdering: Ordering[Item] = Ordering.by(item => (item.priority, item.id))
-
   val Count = 10000
 
-}
+  case class Item(id: String, priority: Int)
 
-case class Item(id: String, priority: Int)
+  implicit val ItemOrdering: Ordering[Item] = Ordering.by(item => (item.priority, item.id))
+
+}
