@@ -37,23 +37,25 @@ class SortedSetBenchmark {
   private var items = SortedSet((1 to 10000).map(i => Item(i.toString, i % 10)):_ *)
 
   @Benchmark
-  def filterNot(): Unit = {
+  def filterNot(): SortedSet[Item] = {
     val id = Random.nextInt(Count)
     val idString = id.toString
     items = items.filterNot(_.id == idString)
     items += Item(idString, id % 10)
+    items
   }
 
   @Benchmark
-  def minus(): Unit = {
+  def minus(): SortedSet[Item] = {
     val id = Random.nextInt(Count)
     val item = Item(id.toString, id % 10)
     items -= item
     items += item
+    items
   }
 
   @Benchmark
-  def find(): Unit = {
+  def find(): Option[Item] = {
     items.find(_.id == Random.nextInt(Count).toString)
   }
 

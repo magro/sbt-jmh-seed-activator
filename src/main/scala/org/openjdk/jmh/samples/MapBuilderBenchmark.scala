@@ -44,110 +44,98 @@ class MapBuilderBenchmark {
   private var items = new util.ArrayList[Item]((1 to Count).map(i => Item("LM_L_" + i.toString, Random.nextLong())).asJava)
 
   @Benchmark
-  def arrayToListMapApply(): Unit = {
-    val res = ListMap(items.toArray(new Array[Item](items.size())).map(i => i.processId -> i.logicalTime): _*)
-    res.size
+  def arrayToListMapApply(): ListMap[String, Long] = {
+    ListMap(items.toArray(new Array[Item](items.size())).map(i => i.processId -> i.logicalTime): _*)
   }
 
   @Benchmark
-  def foldIteratorMapUpdate(): Unit = {
-    val res = items.iterator().asScala.foldLeft(Map.empty[String, Long]) {
+  def foldIteratorMapUpdate(): Map[String, Long] = {
+    items.iterator().asScala.foldLeft(Map.empty[String, Long]) {
       case (result, item) => result.updated(item.processId, item.logicalTime)
     }
-    res.size
   }
 
   @Benchmark
-  def foldIteratorTreeMapUpdate(): Unit = {
-    val res = items.iterator().asScala.foldLeft(TreeMap.empty[String, Long]) {
+  def foldIteratorTreeMapUpdate(): TreeMap[String, Long] = {
+    items.iterator().asScala.foldLeft(TreeMap.empty[String, Long]) {
       case (result, item) => result.updated(item.processId, item.logicalTime)
     }
-    res.size
   }
 
   @Benchmark
-  def foldIteratorHashMapUpdate(): Unit = {
-    val res = items.iterator().asScala.foldLeft(HashMap.empty[String, Long]) {
+  def foldIteratorHashMapUpdate(): HashMap[String, Long] = {
+    items.iterator().asScala.foldLeft(HashMap.empty[String, Long]) {
       case (result, item) => result.updated(item.processId, item.logicalTime)
     }
-    res.size
   }
 
   @Benchmark
-  def foldIteratorListMapUpdate(): Unit = {
-    val res = items.iterator().asScala.foldLeft(ListMap.empty[String, Long]) {
+  def foldIteratorListMapUpdate(): ListMap[String, Long] = {
+    items.iterator().asScala.foldLeft(ListMap.empty[String, Long]) {
       case (result, item) => result.updated(item.processId, item.logicalTime)
     }
-    res.size
   }
 
   @Benchmark
-  def foldIteratorWithMapBuilder(): Unit = {
-    val res = items.iterator().asScala.foldLeft(Map.newBuilder[String, Long]) {
+  def foldIteratorWithMapBuilder(): Map[String, Long] = {
+    items.iterator().asScala.foldLeft(Map.newBuilder[String, Long]) {
       case (result, item) => result += (item.processId -> item.logicalTime)
     }.result()
-    res.size
   }
 
   @Benchmark
-  def foldIteratorWithTreeMapBuilder(): Unit = {
-    val res = items.iterator().asScala.foldLeft(TreeMap.newBuilder[String, Long]) {
+  def foldIteratorWithTreeMapBuilder(): TreeMap[String, Long] = {
+    items.iterator().asScala.foldLeft(TreeMap.newBuilder[String, Long]) {
       case (result, item) => result += (item.processId -> item.logicalTime)
     }.result()
-    res.size
   }
 
   @Benchmark
-  def foldIteratorWithHashMapBuilder(): Unit = {
-    val res = items.iterator().asScala.foldLeft(HashMap.newBuilder[String, Long]) {
+  def foldIteratorWithHashMapBuilder(): HashMap[String, Long] = {
+    items.iterator().asScala.foldLeft(HashMap.newBuilder[String, Long]) {
       case (result, item) => result += (item.processId -> item.logicalTime)
     }.result()
-    res.size
   }
 
   @Benchmark
-  def foldIteratorWithListMapBuilder(): Unit = {
-    val res = items.iterator().asScala.foldLeft(ListMap.newBuilder[String, Long]) {
+  def foldIteratorWithListMapBuilder(): ListMap[String, Long] = {
+    items.iterator().asScala.foldLeft(ListMap.newBuilder[String, Long]) {
       case (result, item) => result += (item.processId -> item.logicalTime)
     }.result()
-    res.size
   }
 
   @Benchmark
-  def foldIteratorWithMutableMapBuilder(): Unit = {
-    val res = items.iterator().asScala.foldLeft(mutable.Map.newBuilder[String, Long]) {
+  def foldIteratorWithMutableMapBuilder(): mutable.Map[String, Long] = {
+    items.iterator().asScala.foldLeft(mutable.Map.newBuilder[String, Long]) {
       case (result, item) => result += (item.processId -> item.logicalTime)
     }.result()
-    res.size
   }
 
   @Benchmark
-  def foldIteratorWithMutableListMapBuilder(): Unit = {
-    val res = items.iterator().asScala.foldLeft(mutable.ListMap.newBuilder[String, Long]) {
+  def foldIteratorWithMutableListMapBuilder(): mutable.ListMap[String, Long] = {
+    items.iterator().asScala.foldLeft(mutable.ListMap.newBuilder[String, Long]) {
       case (result, item) => result += (item.processId -> item.logicalTime)
     }.result()
-    res.size
   }
 
   @Benchmark
-  def foldIteratorWithJavaHashMap(): Unit = {
-    val res = items.iterator().asScala.foldLeft(new JHashMap[String, Long](items.size() + 1)) {
+  def foldIteratorWithJavaHashMap(): JHashMap[String, Long] = {
+    items.iterator().asScala.foldLeft(new JHashMap[String, Long](items.size() + 1)) {
       case (result, item) =>
         result.put(item.processId, item.logicalTime)
         result
     }
-    res.size
   }
 
   @Benchmark
-  def imperativeIteratorWithJavaHashMap(): Unit = {
+  def imperativeIteratorWithJavaHashMap(): JHashMap[String, Long] = {
     val result = new JHashMap[String, Long](items.size() + 1)
     val iter = items.iterator()
     while(iter.hasNext) {
       val item = iter.next()
       result.put(item.processId, item.logicalTime)
     }
-    result.size
+    result
   }
 
 }
